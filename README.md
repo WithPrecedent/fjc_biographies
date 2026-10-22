@@ -16,8 +16,9 @@
 
 `fjc-biographies` downloads the Federal Judicial Center's [Biographical
 Directory of Article III Federal Judges](https://www.fjc.gov/history/judges/biographical-directory-article-iii-federal-judges-export)
-and turns it into tidy tables, including a roster with a row for each court
-that each judge has served on.
+and turns it into tidy tables, including a roster of judges in two formats:
+by appointment (a row for each court that each judge has served on) and by
+judge (a row for each judge).
 
 ## Why use fjc-biographies?
 
@@ -25,20 +26,33 @@ that each judge has served on.
   (demographics, federal judicial service, other federal judicial service,
   education, professional career, and other nominations) and exports a tidy
   CSV file of each.
-- **Tidy tables.** Columns get short, lower case names (`commission_date`
-  for "Commission Date"), blank cells are missing values, identifiers and
-  years are whole numbers, and dates are dates.
 - **A roster of judges.** `build_roster` codes what researchers usually want
   to know about each appointment: the circuit, the years of service and
   senior status, the appointing president's party, the ABA rating, the share
   of senators who voted to confirm, whether it was a recess appointment, the
-  judge's gender and race.
+  judge's gender and race, etc.
 - **Fields from careers, written in a spreadsheet.** A rulebook (a CSV file
-  of regular expressions, from courtpy) makes new fields from each judge's
+  of regular expressions) makes new fields from each judge's
   employment history. The built-in "judges" rulebook flags whether the judge
   was a prosecutor, public defender, law clerk, Supreme Court clerk,
   solicitor general, or law professor, and your own rulebook can add flags,
   counts, labels, or lists of matches without changing any code.
+  The employment history itself stays in the roster as `career`, one
+  position per line, so every field can be checked against the text it was
+  made from.
+- **Names for matching.** Each judge's name is written twelve ways, for
+  matching it against opinions and other datasets: first, middle, and last
+  names; with the middle initial; without the middle name; each with and
+  without the suffix ("Milton Dale Smith, Jr."); and, for the FJC's names
+  with letters in square brackets, both with the brackets removed ("Robert
+  Lanier Anderson") and with the bracketed letters replaced by a period
+  ("R. Lanier Anderson").
+- **Ideology scores, if you want them.** `--jcs` adds each appointment's
+  Judicial Common Space score, computed by
+  [judicial-common-space](https://github.com/WithPrecedent/judicial_common_space),
+  and `--martin-quinn` adds the justices'
+  [Martin-Quinn scores](https://mqscores.wustl.edu) for each appointment to
+  the Supreme Court and exports every justice's score in every term.
 - **Reassignments handled.** A judge who was reassigned to another court
   without a new appointment (as when the Eleventh Circuit was divided from
   the Fifth) keeps the president, party, rating, and vote of the judge's last
@@ -51,8 +65,9 @@ uses to identify the judges of cases, which this package was taken from.
 
 ### Requirements
 
-Python 3.11 or later. The only dependencies are `pandas` (3.0 or later) and
-`numpy`.
+Python 3.11 or later. The dependencies are `pandas` (3.0 or later), `numpy`,
+and [judicial-common-space](https://pypi.org/project/judicial-common-space/)
+(0.1.0 or later), which `pip` installs with it.
 
 ### Installation
 
@@ -70,6 +85,13 @@ roster:
 ```sh
 fjc-biographies
 ```
+
+The roster is exported in two formats, as the FJC's own export is:
+
+| File | Rows | Columns |
+| --- | --- | --- |
+| `roster_by_appointment.csv` | One for each court that each judge has served on | The judge's fields, repeated on each of the judge's rows, and the appointment's fields (`court`, `start_date`, `president`, `party`, ...) |
+| `roster_by_judge.csv` | One for each judge | The judge's fields once, `appointments` (how many courts the judge has served on), and each appointment's fields, numbered in the order of the judge's service (`court_1`, `start_date_1`, ..., `court_2`, ...) |
 
 The FJC updates the directory nightly. Add `--update` to download the files
 again, `--download-only` to skip exporting, and `--data-folder` to choose
@@ -90,6 +112,9 @@ service = fjc_biographies.load('service')
 tables = fjc_biographies.load_all()
 roster = fjc_biographies.build_roster(
     tables['service'], tables['demographics'], tables['career'])
+
+# The same roster with a row for each judge.
+by_judge = fjc_biographies.roster_by_judge(roster)
 ```
 
 To make other fields from judges' careers, copy the built-in rulebook
@@ -106,6 +131,38 @@ careers = fjc_biographies.code_careers(tables['career'], rulebook = 'my_careers.
 or `fjc-biographies --rulebook my_careers.csv` from the command line. The
 columns of a rulebook and the kinds of rules are described in the
 [instructions folder](src/fjc_biographies/instructions/README.md).
+
+### Scores
+
+Judicial Common Space and Martin-Quinn scores are optional:
+
+```sh
+fjc-biographies --jcs --martin-quinn
+```
+
+```python
+roster = fjc_biographies.add_jcs(roster)
+roster = fjc_biographies.add_martin_quinn(roster)
+terms = fjc_biographies.martin_quinn_terms()
+```
+
+| Column | Meaning |
+| --- | --- |
+| `jcs` | The appointment's Judicial Common Space score: the NOMINATE score of the judge's home-state senators of the president's party, or else of the president, and for a justice, the Martin-Quinn score of the appointment's first term on the same scale. |
+| `mq_first`, `mq_last`, `mq_mean`, `mq_terms` | For an appointment to the Supreme Court, the justice's Martin-Quinn scores in its first and last terms, their mean, and the number of terms scored. A justice who became Chief Justice has separate scores for each appointment. |
+
+With `--martin-quinn`, `martin_quinn_terms.csv` has every justice's score in
+every term, with the FJC's `nid` and the appointment's `sequence`.
+
+The files that the scores come from (Voteview's NOMINATE scores, the dates
+of senators' service, and the Martin-Quinn scores) are downloaded into
+judicial-common-space's data folder, which `--scores-folder` or the
+`JUDICIAL_COMMON_SPACE_DATA_DIR` environment variable can change, so that
+courtpy and judicial-common-space share them. The Martin-Quinn website
+sometimes refuses or fails to answer automated requests. Then save
+`justices.csv` from [its page](https://mqscores.wustl.edu/measures.php) in a
+browser and pass its path: `--martin-quinn ~/Downloads/justices.csv`. A copy
+that was downloaded before is used if a new one cannot be.
 
 | Category | FJC file | Rows |
 | --- | --- | --- |
@@ -134,6 +191,23 @@ The data are the work of the Federal Judicial Center's Federal Judicial
 History Office. The FJC asks that published work cite it as: History of the
 Federal Judiciary. http://www.fjc.gov. Web site of the Federal Judicial
 Center, Washington, DC.
+
+## Citation
+
+If you use `fjc-biographies` in your research, please cite it. GitHub's
+"Cite this repository" button reads the same information from
+[`CITATION.cff`](https://www.github.com/WithPrecedent/fjc_biographies/blob/main/CITATION.cff).
+
+```bibtex
+@software{yung_fjc_biographies,
+  author  = {Yung, Corey Rayburn},
+  title   = {fjc-biographies: Downloads and parses the FJC Biographical Directory of Article III Federal Judges},
+  version = {0.1.0},
+  year    = {2026},
+  url     = {https://github.com/WithPrecedent/fjc_biographies},
+  license = {Apache-2.0}
+}
+```
 
 ## License
 

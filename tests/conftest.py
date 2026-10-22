@@ -4,7 +4,9 @@ from __future__ import annotations
 
 import io
 import pathlib
+from typing import Any
 
+import judicial_common_space as jcs
 import pandas as pd
 import pytest
 
@@ -73,9 +75,14 @@ CAREER_COLUMNS = ['nid', 'Sequence', 'Professional Career']
 def tables() -> dict[str, pd.DataFrame]:
     """Returns the files of invented judges, as they are read."""
     names = {row[0]: row[2] for row in SERVICE}
+    # judicial-common-space reads a few more of the FJC's columns.
+    demographics = pd.DataFrame(DEMOGRAPHICS, columns = DEMOGRAPHICS_COLUMNS).assign(
+        jid = lambda table: table['nid'], **{'Birth State': ''})
+    service = pd.DataFrame(SERVICE, columns = SERVICE_COLUMNS).assign(**{
+        'Appointment Title': 'Judge', 'Nomination Date': '', 'Confirmation Date': ''})
     return {
-        'demographics': pd.DataFrame(DEMOGRAPHICS, columns = DEMOGRAPHICS_COLUMNS),
-        'service': pd.DataFrame(SERVICE, columns = SERVICE_COLUMNS),
+        'demographics': demographics,
+        'service': service,
         'other_service': pd.DataFrame(
             [(101, 1, names[101], 'U.S. Magistrate Judge', 'U.S. Magistrate Judge, District of Maine, 1990-1995', '', '')],
             columns = ['nid', 'Sequence', 'Judge Name', 'Type', 'Other Federal Judicial Service', '', ' ']),
@@ -115,4 +122,19 @@ def data_folder(monkeypatch: pytest.MonkeyPatch, tmp_path: pathlib.Path) -> path
     """Keeps the tests' files out of the real data folder."""
     folder = tmp_path / 'data'
     monkeypatch.setenv(options._ENV_DATA, str(folder))
+    monkeypatch.setenv('JUDICIAL_COMMON_SPACE_DATA_DIR', str(tmp_path / 'scores'))
     return folder
+
+
+@pytest.fixture(autouse = True)
+def no_score_downloads(monkeypatch: pytest.MonkeyPatch) -> list[tuple[Any, Any, bool]]:
+    """Refuses judicial-common-space's downloads, and records them."""
+    requested: list[tuple[Any, Any, bool]] = []
+
+    def refuse(kinds: Any = None, folder: Any = None, *, overwrite: bool = False, **kwargs: Any) -> None:
+        requested.append((kinds, folder, overwrite))
+        message = f'the tests do not download {kinds}'
+        raise OSError(message)
+
+    monkeypatch.setattr(jcs.sources, 'download', refuse)
+    return requested

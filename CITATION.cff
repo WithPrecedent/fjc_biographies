@@ -1,0 +1,28 @@
+cff-version: 1.2.0
+message: "If you use fjc-biographies in your research, please cite it as below."
+type: software
+title: "fjc-biographies: Downloads and parses the FJC Biographical Directory of Article III Federal Judges"
+abstract: >-
+  A Python package that downloads the Federal Judicial Center's Biographical
+  Directory of Article III Federal Judges, turns it into tidy tables, and
+  builds a roster of judges by appointment and by judge, with fields coded
+  from their careers, their names written for matching, and optional
+  Judicial Common Space and Martin-Quinn scores.
+authors:
+  - given-names: Corey Rayburn
+    family-names: Yung
+    email: coreyrayburnyung@gmail.com
+    orcid: "https://orcid.org/0000-0001-6524-9956"
+version: 0.1.0
+date-released: 2026-10-22
+license: Apache-2.0
+repository-code: "https://github.com/WithPrecedent/fjc_biographies"
+url: "https://WithPrecedent.github.io/fjc_biographies"
+keywords:
+  - empirical legal studies
+  - Federal Judicial Center
+  - federal judges
+  - judicial biographies
+  - judicial common space
+  - law
+  - martin-quinn scores

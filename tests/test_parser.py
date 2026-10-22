@@ -168,6 +168,28 @@ def test_build_roster_careers(table: pd.DataFrame) -> None:
     assert careers['prosecutor'].dtype == bool
 
 
+def test_build_roster_keeps_career_text(table: pd.DataFrame) -> None:
+    # The career that the rules searched comes before the fields made from
+    # it, with each position on its own line, in order.
+    columns = list(table.columns)
+    assert columns.index('career') == columns.index(FLAGS[0]) - 1
+    careers = table.drop_duplicates('nid').set_index('nid')['career']
+    assert careers[101] == (
+        'Law clerk, Hon. A. Judge, U.S. District Court, District of Rhode Island, 1971-1973\n'
+        'Assistant attorney general, State of Massachusetts, 1973-1974')
+    assert careers[102] == 'Assistant U.S. attorney, District of New Hampshire, 1981-1987'
+    # Every row of a judge has it, and a judge with no career has none.
+    assert table.groupby('nid')['career'].nunique(dropna = False).max() == 1
+    assert pd.isna(careers[106])
+    # The positions are ordered by their sequence numbers, not their rows.
+    files = tables()
+    shuffled = fjc_biographies.build_roster(
+        files['service'], files['demographics'], files['career'].iloc[::-1])
+    assert shuffled.loc[shuffled['nid'] == 101, 'career'].iloc[0] == careers[101]
+    # Without the file of careers, there is no career.
+    assert 'career' not in fjc_biographies.build_roster(files['service'], files['demographics']).columns
+
+
 def test_build_roster_from_paths(tmp_path: pathlib.Path) -> None:
     paths = {}
     for kind in ('service', 'demographics'):
@@ -281,3 +303,65 @@ def test_load_all(requests: list[str]) -> None:
         loaded['service'], loaded['demographics'], loaded['career'])
     assert len(roster) == len(SERVICE)
     assert roster.loc[roster['nid'] == 104, 'supreme_court_clerk'].all()
+
+
+def test_roster_by_judge(table: pd.DataFrame) -> None:
+    roster = table.reset_index(drop = True)
+    judges = fjc_biographies.roster_by_judge(roster)
+    # A row for each judge, in the order of the roster.
+    assert list(judges['nid']) == list(dict.fromkeys(roster['nid']))
+    assert judges['nid'].is_unique
+    by_nid = judges.set_index('nid')
+    # The judge's own columns are given once, then the number of
+    # appointments, then each appointment's columns, numbered.
+    columns = list(judges.columns)
+    assert columns[:6] == ['nid', 'judge', 'last_name', 'first_name', 'middle_name', 'suffix']
+    assert columns.index('appointments') < columns.index('sequence_1') < columns.index('sequence_2')
+    assert columns[columns.index('sequence_1'):columns.index('sequence_2')] == [
+        'sequence_1', 'court_1', 'court_type_1', 'circuit_num_1', 'start_date_1',
+        'end_date_1', 'senior_date_1', 'start_year_1', 'end_year_1',
+        'senior_year_1', 'president_1', 'party_1', 'aba_rating_1', 'recess_1',
+        'senate_vote_1']
+    assert 'court_3' not in columns
+    for column in ('birth_year', 'woman', 'minority', 'career', *FLAGS):
+        assert column in columns and f'{column}_1' not in columns
+    # Appointments are numbered in the order of the judge's service.
+    stone = by_nid.loc[107]
+    assert stone['appointments'] == 2
+    assert stone['court_type_1'] == DISTRICT and stone['court_2'] == FIRST
+    assert (stone['start_year_1'], stone['end_year_1'], stone['start_year_2']) == (1990, 1992, 1992)
+    assert (stone['aba_rating_1'], stone['aba_rating_2']) == (2, 3)
+    # A judge with one appointment has missing values for a second.
+    lynch = by_nid.loc[101]
+    assert lynch['appointments'] == 1 and lynch['court_1'] == FIRST
+    assert pd.isna(lynch['court_2']) and pd.isna(lynch['recess_2']) and pd.isna(lynch['start_date_2'])
+    assert lynch['prosecutor'] and lynch['woman']
+    assert lynch['career'].startswith('Law clerk') and lynch['career'].count('\n') == 1
+    # The types of the roster are kept, with booleans that can be missing.
+    assert judges['start_date_2'].dtype == roster['start_date'].dtype
+    assert judges['party_2'].dtype == 'Int64'
+    assert judges['recess_1'].dtype == 'boolean'
+    assert judges['appointments'].sum() == len(roster)
+
+
+def test_roster_by_judge_has_every_appointment(table: pd.DataFrame) -> None:
+    # Making a row for each appointment again gives back the roster.
+    roster = table.reset_index(drop = True)
+    judges = fjc_biographies.roster_by_judge(roster)
+    fields = [c.removesuffix('_1') for c in judges.columns if c.endswith('_1')]
+    rows = []
+    for number in (1, 2):
+        part = judges[[c for c in judges.columns if not c[-2:] in ('_1', '_2')]].copy()
+        for field in fields:
+            part[field] = judges[f'{field}_{number}']
+        part['place'] = number
+        rows.append(part[part['court'].notna()])
+    back = pd.concat(rows).sort_values(['nid', 'place'], kind = 'stable')
+    back = back[list(roster.columns)].reset_index(drop = True)
+    pd.testing.assert_frame_equal(
+        back.astype(str), roster.astype({'recess': 'boolean'}).astype(str))
+
+
+def test_roster_by_judge_needs_a_roster() -> None:
+    with pytest.raises(KeyError, match = 'a roster'):
+        fjc_biographies.roster_by_judge(pd.DataFrame({'nid': [1]}))

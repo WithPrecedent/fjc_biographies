@@ -30,6 +30,7 @@ keywords = [
     "judicial biographies",
     "law"]
 dependencies = [
+    "judicial-common-space>=0.1.0",
     "numpy",
     "pandas>=3.0"]
 
@@ -109,6 +110,11 @@ check_untyped_defs = true
 warn_return_any = true
 warn_unused_ignores = true
 show_error_codes = true
+
+[[tool.mypy.overrides]]
+# These packages are annotated but do not ship a py.typed marker.
+module = ["judicial_common_space.*"]
+follow_untyped_imports = true
 
 
 [tool.pytest.ini_options]

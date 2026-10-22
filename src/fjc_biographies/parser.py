@@ -7,7 +7,7 @@ for "Commission Date"), blank cells are missing, the FJC's numbers ("nid",
 
 `build_roster` combines the files of federal judicial service,
 demographics, and professional careers into one table, with a row for each
-court that each judge has served on, that codes what researchers usually
+court that each judge has served on (each appointment), that codes what researchers usually
 want to know about a judge's appointment (such as the party of the
 appointing president and the share of senators who voted to confirm the
 judge). It is the table that courtpy uses to identify the judges of cases:
@@ -18,7 +18,10 @@ import fjc_biographies
 tables = fjc_biographies.load_all()
 roster = fjc_biographies.build_roster(
     tables['service'], tables['demographics'], tables['career'])
+by_judge = fjc_biographies.roster_by_judge(roster)
 ```
+
+`roster_by_judge` organizes the same roster with a row for each judge.
 
 The fields that a roster has about judges' careers are made by a rulebook
 (see `rules`): the "judges" rulebook in fjc_biographies' "instructions"
@@ -33,6 +36,7 @@ Contents:
     load: returns the tidy table of one of the FJC's files.
     load_all: returns the tidy tables of all of the FJC's files.
     read: returns the tidy table of a CSV file of the directory.
+    roster_by_judge: returns a roster with one row for each judge.
     tidy: returns a table of the directory with names, missing values, and
         types that are easy to use.
 
@@ -48,7 +52,7 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
-from . import downloader, options, rules
+from . import downloader, names, options, rules
 
 _APPEALS: str = 'U.S. Court of Appeals'
 # The columns of an appointment, which a judge who was reassigned to another
@@ -56,6 +60,14 @@ _APPEALS: str = 'U.S. Court of Appeals'
 _APPOINTMENT: tuple[str, ...] = (
     'appointing_president', 'party_of_appointing_president', 'aba_rating',
     'recess_appointment_date', 'senate_vote_type', 'ayes_nays')
+# The columns of a roster that describe one of a judge's appointments (and
+# so can differ between a judge's rows), in the order that `roster_by_judge`
+# numbers them. Every other column describes the judge.
+_BY_APPOINTMENT: tuple[str, ...] = (
+    'sequence', 'court', 'court_type', 'circuit_num', 'start_date',
+    'end_date', 'senior_date', 'start_year', 'end_year', 'senior_year',
+    'president', 'party', 'aba_rating', 'recess', 'senate_vote', 'jcs',
+    'mq_first', 'mq_last', 'mq_mean', 'mq_terms')
 _CIRCUIT: re.Pattern[str] = re.compile(r'for the (.+) Circuit\s*$')
 # "Middle District of Georgia" and "Districts of North Carolina" both end
 # with the state, which any note in parentheses follows.
@@ -92,6 +104,8 @@ def build_roster(
     | `nid` | The FJC's number for the judge. |
     | `judge` | The judge's name, as the FJC reports it. |
     | `last_name`, `first_name`, `middle_name`, `suffix` | Its parts. |
+    | `name_first_middle_last`, ... | The name written in each of the ways that `names.permutations` writes it, for matching it against other sources: with and without the middle name or its initial and the suffix, and with the letters that the FJC puts in square brackets kept or replaced with a period (see `names`). |
+    | `sequence` | The FJC's number for the order of the appointment among the judge's, which identifies it with `nid`. |
     | `court`, `court_type` | The court's name and its type. |
     | `circuit_num` | The number of the court's circuit: its own for a court of appeals (12 for the D.C. Circuit and 13 for the Federal Circuit), or for a district court, that of its state now. Missing for other courts. |
     | `start_date`, `end_date`, `senior_date` | The dates the judge's service on the court began (with a commission or a recess appointment) and ended, and the judge took senior status. `end_date` is missing for a judge who is still serving. |
@@ -109,10 +123,14 @@ def build_roster(
     president, party, rating, recess appointment, and vote of the judge's
     last appointment.
 
-    If `career` is passed, each variable that `rulebook` makes from a
-    judge's career (see `code_careers`) is a column too. The "judges"
-    rulebook makes "prosecutor", "public_defender", "law_clerk",
-    "supreme_court_clerk", "solicitor_general", and "law_professor".
+    If `career` is passed, the judge's professional career is the column
+    "career", with each position on its own line, in order. It is the text
+    that the rules search, so the fields made from it can be checked
+    against it. Each variable that `rulebook` makes from the career (see
+    `code_careers`) is a column after it. The "judges" rulebook makes
+    "prosecutor", "public_defender", "law_clerk", "supreme_court_clerk",
+    "solicitor_general", and "law_professor". "career" is missing for a
+    judge with no career in the file.
 
     Args:
         service: the file of federal judicial service, as a path, the table
@@ -171,6 +189,9 @@ def build_roster(
         'first_name': personal['first_name'],
         'middle_name': personal['middle_name'],
         'suffix': personal['suffix'],
+        'sequence': (
+            served['sequence'] if 'sequence' in served.columns
+            else served.groupby('nid').cumcount() + 1).astype('Int64'),
         'court': served['court_name'],
         'court_type': served['court_type'],
         'circuit_num': pd.array(
@@ -197,8 +218,14 @@ def build_roster(
             dtype = 'Float64'),
         'woman': gender.astype('boolean'),
         'minority': (race != 'White').astype('boolean').mask(race.isna())})
+    roster = names.add_permutations(roster)
     if career is not None:
-        coded = code_careers(career, roster['nid'], rulebook = rulebook)
+        positions = _table(career)
+        _require(
+            positions, ['nid', 'position'], 'the file of professional careers')
+        roster['career'] = roster['nid'].map(_histories(positions)).astype(
+            'str')
+        coded = code_careers(positions, roster['nid'], rulebook = rulebook)
         clashes = [c for c in coded.columns if c in roster.columns]
         if clashes:
             message = (
@@ -246,11 +273,7 @@ def code_careers(
     positions = _table(career)
     _require(positions, ['nid', 'position'], 'the file of professional careers')
     book = rules.Rulebook.create(rulebook)
-    order = ['nid', 'sequence'] if 'sequence' in positions.columns else ['nid']
-    histories = (
-        positions.dropna(subset = ['nid', 'position'])
-        .sort_values(order, kind = 'stable')
-        .groupby('nid')['position'].agg('\n'.join))
+    histories = _histories(positions)
     judges = (
         list(histories.index) if nids is None
         else list(dict.fromkeys(int(nid) for nid in nids)))
@@ -331,6 +354,59 @@ def read(path: pathlib.Path | str, **kwargs: Any) -> pd.DataFrame:
     except UnicodeDecodeError:
         table = pd.read_csv(path, encoding = 'cp1252', **settings)
     return tidy(table)
+
+
+def roster_by_judge(roster: pd.DataFrame) -> pd.DataFrame:
+    """Returns a roster with one row for each judge.
+
+    A roster made by `build_roster` has a row for each appointment: each
+    court that each judge has served on. This is the same information
+    organized by judge, as the FJC's own "organized by judge" export is. The
+    columns that describe the judge (such as the judge's name, "birth_year",
+    "woman", and the fields of the judge's career) are given once.
+    "appointments" is how many courts the judge has served on. Then the
+    columns that describe an appointment (such as "court", "start_date", and
+    "party") are given for each, numbered in the order of the judge's
+    service: "court_1", "start_date_1", ..., "court_2", and so on. They are
+    missing for a judge with fewer appointments than the most that any
+    judge has.
+
+    Args:
+        roster: a roster with a row for each appointment, as `build_roster`
+            makes it, in the order of each judge's service.
+
+    Returns:
+        The roster with a row for each judge, in the order that the judges
+            first appear in `roster`.
+
+    Raises:
+        KeyError: if `roster` lacks "nid" or "court".
+
+    """
+    _require(roster, ['nid', 'court'], 'a roster')
+    roster = roster.dropna(subset = ['nid']).reset_index(drop = True)
+    fields = [c for c in _BY_APPOINTMENT if c in roster.columns]
+    personal = [c for c in roster.columns if c not in _BY_APPOINTMENT]
+    judges = roster[personal].drop_duplicates('nid').set_index('nid')
+    judges.insert(
+        len(judges.columns), 'appointments',
+        roster.groupby('nid').size().reindex(judges.index).astype('int64'))
+    place = roster.groupby('nid').cumcount() + 1
+    # A boolean column gets missing values for the judges with fewer
+    # appointments, so it is made one that can have them.
+    appointed = roster[fields].astype({
+        c: 'boolean' for c in fields if roster[c].dtype == bool})
+    # `pivot_table` would aggregate each cell, which loses text and types, so
+    # each judge's appointments are unstacked instead.
+    indexed = appointed.set_index([roster['nid'], place.rename('place')])
+    wide = pd.DataFrame(indexed.unstack('place'))  # noqa: PD010
+    numbered = [
+        (field, number) for number in range(1, int(place.max() or 0) + 1)
+        for field in fields]
+    wide = wide.reindex(columns = pd.MultiIndex.from_tuples(numbered))
+    wide.columns = [f'{field}_{number}' for field, number in numbered]
+    return pd.concat(
+        [judges, wide.reindex(judges.index)], axis = 1).reset_index()
 
 
 def tidy(table: pd.DataFrame) -> pd.DataFrame:
@@ -421,6 +497,29 @@ def _column_name(column: Any) -> str:
     if name in options._COLUMN_NAMES:
         return options._COLUMN_NAMES[name]
     return re.sub(r'[^a-z0-9]+', '_', name).strip('_')
+
+
+def _histories(positions: pd.DataFrame) -> pd.Series:
+    """Returns each judge's professional career as one text.
+
+    The positions are joined with line breaks, rather than the semicolons of
+    the FJC's export organized by judge, because some positions have
+    semicolons in them.
+
+    Args:
+        positions: the tidy table of the file of professional careers.
+
+    Returns:
+        The judge's positions in the order of their sequence numbers, one on
+            each line, labeled by the judge's number ("nid").
+
+    """
+    order = ['nid', 'sequence'] if 'sequence' in positions.columns else ['nid']
+    histories: pd.Series = (
+        positions.dropna(subset = ['nid', 'position'])
+        .sort_values(order, kind = 'stable')
+        .groupby('nid')['position'].agg('\n'.join))
+    return histories
 
 
 def _number(values: pd.Series, pattern: str) -> pd.Series:
