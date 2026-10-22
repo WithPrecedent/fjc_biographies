@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Coverage for src/fjc_biographies/options.py: 100%</title>
+    <link rel="icon" sizes="32x32" href="favicon_32_cb_c827f16f.png">
+    <link rel="stylesheet" href="style_cb_4667309f.css" type="text/css">
+    <script src="coverage_html_cb_54cfdca1.js" defer></script>
+</head>
+<body class="pyfile">
+<header>
+    <div class="content">
+        <h1>
+            <span class="text">Coverage for </span><b>src<span class="sep">/</span>fjc_biographies<span class="sep">/</span>options.py</b>:
+            <span class="pc_cov">100%</span>
+        </h1>
+        <aside id="help_panel_wrapper">
+            <input id="help_panel_state" type="checkbox">
+            <label for="help_panel_state">
+                <img id="keyboard_icon" src="keybd_closed_cb_900cfef5.png" alt="Show/hide keyboard shortcuts">
+            </label>
+            <div id="help_panel">
+                <p class="legend">Shortcuts on this page</p>
+                <div class="keyhelp">
+                    <p>
+                        <kbd>r</kbd>
+                        <kbd>m</kbd>
+                        <kbd>x</kbd>
+                        <kbd>p</kbd>
+                        &nbsp; toggle line displays
+                    </p>
+                    <p>
+                        <kbd>j</kbd>
+                        <kbd>k</kbd>
+                        &nbsp; next/prev highlighted chunk
+                    </p>
+                    <p>
+                        <kbd>0</kbd> &nbsp; (zero) top of page
+                    </p>
+                    <p>
+                        <kbd>1</kbd> &nbsp; (one) first highlighted chunk
+                    </p>
+                    <p>
+                        <kbd>[</kbd>
+                        <kbd>]</kbd>
+                        &nbsp; prev/next file
+                    </p>
+                    <p>
+                        <kbd>u</kbd> &nbsp; up to the index
+                    </p>
+                    <p>
+                        <kbd>?</kbd> &nbsp; show/hide this help
+                    </p>
+                </div>
+            </div>
+        </aside>
+        <h2>
+            <span class="text">14 statements &nbsp;</span>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">14<span class="text"> run</span></button>
+            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">0<span class="text"> missing</span></button>
+            <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">0<span class="text"> excluded</span></button>
+            <button type="button" class="par run show_par button_toggle_par" value="par" data-shortcut="p" title="Toggle lines partially run">0<span class="text"> partial</span></button>
+        </h2>
+        <p class="text">
+            <a id="prevFileLink" class="nav" href="z_e714c804d4e2a9d8_names_py.html">&#xab; prev</a> &nbsp; &nbsp;
+            <a id="indexLink" class="nav" href="covindex.html">&Hat; index</a> &nbsp; &nbsp;
+            <a id="nextFileLink" class="nav" href="z_e714c804d4e2a9d8_parser_py.html">&#xbb; next</a>
+            &nbsp; &nbsp; &nbsp;
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.17.0">coverage.py v7.17.0</a>,
+            created at 2026-10-22 22:47 +0000
+        </p>
+        <aside class="hidden">
+            <button type="button" class="button_next_chunk" data-shortcut="j"></button>
+            <button type="button" class="button_prev_chunk" data-shortcut="k"></button>
+            <button type="button" class="button_top_of_page" data-shortcut="0"></button>
+            <button type="button" class="button_first_chunk" data-shortcut="1"></button>
+            <button type="button" class="button_prev_file" data-shortcut="["></button>
+            <button type="button" class="button_next_file" data-shortcut="]"></button>
+            <button type="button" class="button_to_index" data-shortcut="u"></button>
+            <button type="button" class="button_show_hide_help" data-shortcut="?"></button>
+        </aside>
+    </div>
+</header>
+<main id="source">
+    <p class="pln"><span class="n"><a id="t1" href="#t1">1</a></span><span class="t"><span class="str">&quot;&quot;&quot;Default settings for downloading and parsing the FJC&#x27;s judge biographies.</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t2" href="#t2">2</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t3" href="#t3">3</a></span><span class="t"><span class="str">These are module-level constants so that a project built on `fjc_biographies`</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t4" href="#t4">4</a></span><span class="t"><span class="str">can change them before they are used (for example,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t5" href="#t5">5</a></span><span class="t"><span class="str">`fjc_biographies.options._TIMEOUT = 600` to wait longer for the FJC website).</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t6" href="#t6">6</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t7" href="#t7">7</a></span><span class="t"><span class="str">Contents:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t8" href="#t8">8</a></span><span class="t"><span class="str">    _ABA_RATINGS: the number for each rating of the American Bar Association.</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t9" href="#t9">9</a></span><span class="t"><span class="str">    _APPEALS_CIRCUITS: the number of each court of appeals&#x27; circuit, by the</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t10" href="#t10">10</a></span><span class="t"><span class="str">        words that name it.</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t11" href="#t11">11</a></span><span class="t"><span class="str">    _CATEGORIES: the FJC&#x27;s files of the directory, by what `fjc_biographies`</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t12" href="#t12">12</a></span><span class="t"><span class="str">        calls each.</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t13" href="#t13">13</a></span><span class="t"><span class="str">    _COLUMN_NAMES: names for the columns whose names are not made the usual</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t14" href="#t14">14</a></span><span class="t"><span class="str">        way (see `parser.tidy`).</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t15" href="#t15">15</a></span><span class="t"><span class="str">    _DATA_FOLDER: the data folder when fjc_biographies runs from its</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t16" href="#t16">16</a></span><span class="t"><span class="str">        repository.</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t17" href="#t17">17</a></span><span class="t"><span class="str">    _DISTRICT_CIRCUITS: the number of the circuit of each state or territory</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t18" href="#t18">18</a></span><span class="t"><span class="str">        with a district court.</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t19" href="#t19">19</a></span><span class="t"><span class="str">    _ENV_DATA: environment variable that can name the data folder.</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t20" href="#t20">20</a></span><span class="t"><span class="str">    _EXPORT_URL: address of the page that links to the FJC&#x27;s files.</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t21" href="#t21">21</a></span><span class="t"><span class="str">    _FJC_URL: address of the folder with the FJC&#x27;s files.</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t22" href="#t22">22</a></span><span class="t"><span class="str">    _PARTIES: the number for each party of an appointing president.</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t23" href="#t23">23</a></span><span class="t"><span class="str">    _TIMEOUT: seconds to wait for the FJC website before giving up.</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t24" href="#t24">24</a></span><span class="t"><span class="str">    _USER_AGENT: how fjc_biographies identifies itself to servers.</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t25" href="#t25">25</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t26" href="#t26">26</a></span><span class="t"><span class="str">&quot;&quot;&quot;</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t27" href="#t27">27</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t28" href="#t28">28</a></span><span class="t"><span class="key">from</span> <span class="nam">__future__</span> <span class="key">import</span> <span class="nam">annotations</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t29" href="#t29">29</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t30" href="#t30">30</a></span><span class="t"><span class="key">import</span> <span class="nam">pathlib</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t31" href="#t31">31</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t32" href="#t32">32</a></span><span class="t"><span class="nam">_ABA_RATINGS</span><span class="op">:</span> <span class="nam">dict</span><span class="op">[</span><span class="nam">str</span><span class="op">,</span> <span class="nam">int</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t33" href="#t33">33</a></span><span class="t">    <span class="str">&#x27;Exceptionally Well Qualified&#x27;</span><span class="op">:</span> <span class="num">4</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t34" href="#t34">34</a></span><span class="t">    <span class="str">&#x27;Well Qualified&#x27;</span><span class="op">:</span> <span class="num">3</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t35" href="#t35">35</a></span><span class="t">    <span class="str">&#x27;Qualified&#x27;</span><span class="op">:</span> <span class="num">2</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t36" href="#t36">36</a></span><span class="t">    <span class="str">&#x27;Not Qualified&#x27;</span><span class="op">:</span> <span class="num">1</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t37" href="#t37">37</a></span><span class="t">    <span class="str">&#x27;Not Qualified By Reason of Age&#x27;</span><span class="op">:</span> <span class="num">1</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t38" href="#t38">38</a></span><span class="t"><span class="nam">_APPEALS_CIRCUITS</span><span class="op">:</span> <span class="nam">dict</span><span class="op">[</span><span class="nam">str</span><span class="op">,</span> <span class="nam">int</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t39" href="#t39">39</a></span><span class="t">    <span class="str">&#x27;First&#x27;</span><span class="op">:</span> <span class="num">1</span><span class="op">,</span> <span class="str">&#x27;Second&#x27;</span><span class="op">:</span> <span class="num">2</span><span class="op">,</span> <span class="str">&#x27;Third&#x27;</span><span class="op">:</span> <span class="num">3</span><span class="op">,</span> <span class="str">&#x27;Fourth&#x27;</span><span class="op">:</span> <span class="num">4</span><span class="op">,</span> <span class="str">&#x27;Fifth&#x27;</span><span class="op">:</span> <span class="num">5</span><span class="op">,</span> <span class="str">&#x27;Sixth&#x27;</span><span class="op">:</span> <span class="num">6</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t40" href="#t40">40</a></span><span class="t">    <span class="str">&#x27;Seventh&#x27;</span><span class="op">:</span> <span class="num">7</span><span class="op">,</span> <span class="str">&#x27;Eighth&#x27;</span><span class="op">:</span> <span class="num">8</span><span class="op">,</span> <span class="str">&#x27;Ninth&#x27;</span><span class="op">:</span> <span class="num">9</span><span class="op">,</span> <span class="str">&#x27;Tenth&#x27;</span><span class="op">:</span> <span class="num">10</span><span class="op">,</span> <span class="str">&#x27;Eleventh&#x27;</span><span class="op">:</span> <span class="num">11</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t41" href="#t41">41</a></span><span class="t">    <span class="str">&#x27;District of Columbia&#x27;</span><span class="op">:</span> <span class="num">12</span><span class="op">,</span> <span class="str">&#x27;Federal&#x27;</span><span class="op">:</span> <span class="num">13</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t42" href="#t42">42</a></span><span class="t"><span class="com"># The files of the Biographical Directory of Article III Federal Judges that</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t43" href="#t43">43</a></span><span class="t"><span class="com"># are organized by category, in the order of the FJC&#x27;s export page.</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t44" href="#t44">44</a></span><span class="t"><span class="nam">_CATEGORIES</span><span class="op">:</span> <span class="nam">dict</span><span class="op">[</span><span class="nam">str</span><span class="op">,</span> <span class="nam">str</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t45" href="#t45">45</a></span><span class="t">    <span class="str">&#x27;demographics&#x27;</span><span class="op">:</span> <span class="str">&#x27;demographics.csv&#x27;</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t46" href="#t46">46</a></span><span class="t">    <span class="str">&#x27;service&#x27;</span><span class="op">:</span> <span class="str">&#x27;federal-judicial-service.csv&#x27;</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t47" href="#t47">47</a></span><span class="t">    <span class="str">&#x27;other_service&#x27;</span><span class="op">:</span> <span class="str">&#x27;other-federal-judicial-service.csv&#x27;</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t48" href="#t48">48</a></span><span class="t">    <span class="str">&#x27;education&#x27;</span><span class="op">:</span> <span class="str">&#x27;education.csv&#x27;</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t49" href="#t49">49</a></span><span class="t">    <span class="str">&#x27;career&#x27;</span><span class="op">:</span> <span class="str">&#x27;professional-career.csv&#x27;</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t50" href="#t50">50</a></span><span class="t">    <span class="str">&#x27;other_nominations&#x27;</span><span class="op">:</span> <span class="str">&#x27;other-nominations-recess.csv&#x27;</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t51" href="#t51">51</a></span><span class="t"><span class="nam">_COLUMN_NAMES</span><span class="op">:</span> <span class="nam">dict</span><span class="op">[</span><span class="nam">str</span><span class="op">,</span> <span class="nam">str</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t52" href="#t52">52</a></span><span class="t">    <span class="str">&#x27;ayes/nays&#x27;</span><span class="op">:</span> <span class="str">&#x27;ayes_nays&#x27;</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t53" href="#t53">53</a></span><span class="t">    <span class="str">&#x27;2nd service as chief judge, begin&#x27;</span><span class="op">:</span> <span class="str">&#x27;second_chief_judge_begin&#x27;</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t54" href="#t54">54</a></span><span class="t">    <span class="str">&#x27;2nd service as chief judge, end&#x27;</span><span class="op">:</span> <span class="str">&#x27;second_chief_judge_end&#x27;</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t55" href="#t55">55</a></span><span class="t">    <span class="str">&#x27;service as chief judge, begin&#x27;</span><span class="op">:</span> <span class="str">&#x27;chief_judge_begin&#x27;</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t56" href="#t56">56</a></span><span class="t">    <span class="str">&#x27;service as chief judge, end&#x27;</span><span class="op">:</span> <span class="str">&#x27;chief_judge_end&#x27;</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t57" href="#t57">57</a></span><span class="t">    <span class="str">&#x27;other federal judicial service&#x27;</span><span class="op">:</span> <span class="str">&#x27;description&#x27;</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t58" href="#t58">58</a></span><span class="t">    <span class="str">&#x27;other nominations/recess appointments&#x27;</span><span class="op">:</span> <span class="str">&#x27;description&#x27;</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t59" href="#t59">59</a></span><span class="t">    <span class="str">&#x27;professional career&#x27;</span><span class="op">:</span> <span class="str">&#x27;position&#x27;</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t60" href="#t60">60</a></span><span class="t">    <span class="str">&#x27;termination&#x27;</span><span class="op">:</span> <span class="str">&#x27;termination_reason&#x27;</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t61" href="#t61">61</a></span><span class="t"><span class="com"># &quot;data/courts/fjc_biographies&quot; two folders above the repository (beside the</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t62" href="#t62">62</a></span><span class="t"><span class="com"># folder of code projects), where courtpy and fjc-idb keep their data too.</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t63" href="#t63">63</a></span><span class="t"><span class="nam">_DATA_FOLDER</span><span class="op">:</span> <span class="nam">pathlib</span><span class="op">.</span><span class="nam">Path</span> <span class="op">=</span> <span class="op">(</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t64" href="#t64">64</a></span><span class="t">    <span class="nam">pathlib</span><span class="op">.</span><span class="nam">Path</span><span class="op">(</span><span class="nam">__file__</span><span class="op">)</span><span class="op">.</span><span class="nam">parents</span><span class="op">[</span><span class="num">4</span><span class="op">]</span> <span class="op">/</span> <span class="str">&#x27;data&#x27;</span> <span class="op">/</span> <span class="str">&#x27;courts&#x27;</span> <span class="op">/</span> <span class="str">&#x27;fjc_biographies&#x27;</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t65" href="#t65">65</a></span><span class="t"><span class="com"># The circuits that the states and territories are in now (12 for the</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t66" href="#t66">66</a></span><span class="t"><span class="com"># District of Columbia).</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t67" href="#t67">67</a></span><span class="t"><span class="nam">_DISTRICT_CIRCUITS</span><span class="op">:</span> <span class="nam">dict</span><span class="op">[</span><span class="nam">str</span><span class="op">,</span> <span class="nam">int</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t68" href="#t68">68</a></span><span class="t">    <span class="str">&#x27;Maine&#x27;</span><span class="op">:</span> <span class="num">1</span><span class="op">,</span> <span class="str">&#x27;Massachusetts&#x27;</span><span class="op">:</span> <span class="num">1</span><span class="op">,</span> <span class="str">&#x27;New Hampshire&#x27;</span><span class="op">:</span> <span class="num">1</span><span class="op">,</span> <span class="str">&#x27;Puerto Rico&#x27;</span><span class="op">:</span> <span class="num">1</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t69" href="#t69">69</a></span><span class="t">    <span class="str">&#x27;Rhode Island&#x27;</span><span class="op">:</span> <span class="num">1</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t70" href="#t70">70</a></span><span class="t">    <span class="str">&#x27;Connecticut&#x27;</span><span class="op">:</span> <span class="num">2</span><span class="op">,</span> <span class="str">&#x27;New York&#x27;</span><span class="op">:</span> <span class="num">2</span><span class="op">,</span> <span class="str">&#x27;Vermont&#x27;</span><span class="op">:</span> <span class="num">2</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t71" href="#t71">71</a></span><span class="t">    <span class="str">&#x27;Delaware&#x27;</span><span class="op">:</span> <span class="num">3</span><span class="op">,</span> <span class="str">&#x27;New Jersey&#x27;</span><span class="op">:</span> <span class="num">3</span><span class="op">,</span> <span class="str">&#x27;Pennsylvania&#x27;</span><span class="op">:</span> <span class="num">3</span><span class="op">,</span> <span class="str">&#x27;Virgin Islands&#x27;</span><span class="op">:</span> <span class="num">3</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t72" href="#t72">72</a></span><span class="t">    <span class="str">&#x27;Maryland&#x27;</span><span class="op">:</span> <span class="num">4</span><span class="op">,</span> <span class="str">&#x27;North Carolina&#x27;</span><span class="op">:</span> <span class="num">4</span><span class="op">,</span> <span class="str">&#x27;South Carolina&#x27;</span><span class="op">:</span> <span class="num">4</span><span class="op">,</span> <span class="str">&#x27;Virginia&#x27;</span><span class="op">:</span> <span class="num">4</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t73" href="#t73">73</a></span><span class="t">    <span class="str">&#x27;West Virginia&#x27;</span><span class="op">:</span> <span class="num">4</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t74" href="#t74">74</a></span><span class="t">    <span class="str">&#x27;Canal Zone&#x27;</span><span class="op">:</span> <span class="num">5</span><span class="op">,</span> <span class="str">&#x27;Louisiana&#x27;</span><span class="op">:</span> <span class="num">5</span><span class="op">,</span> <span class="str">&#x27;Mississippi&#x27;</span><span class="op">:</span> <span class="num">5</span><span class="op">,</span> <span class="str">&#x27;Texas&#x27;</span><span class="op">:</span> <span class="num">5</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t75" href="#t75">75</a></span><span class="t">    <span class="str">&#x27;Kentucky&#x27;</span><span class="op">:</span> <span class="num">6</span><span class="op">,</span> <span class="str">&#x27;Michigan&#x27;</span><span class="op">:</span> <span class="num">6</span><span class="op">,</span> <span class="str">&#x27;Ohio&#x27;</span><span class="op">:</span> <span class="num">6</span><span class="op">,</span> <span class="str">&#x27;Tennessee&#x27;</span><span class="op">:</span> <span class="num">6</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t76" href="#t76">76</a></span><span class="t">    <span class="str">&#x27;Illinois&#x27;</span><span class="op">:</span> <span class="num">7</span><span class="op">,</span> <span class="str">&#x27;Indiana&#x27;</span><span class="op">:</span> <span class="num">7</span><span class="op">,</span> <span class="str">&#x27;Wisconsin&#x27;</span><span class="op">:</span> <span class="num">7</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t77" href="#t77">77</a></span><span class="t">    <span class="str">&#x27;Arkansas&#x27;</span><span class="op">:</span> <span class="num">8</span><span class="op">,</span> <span class="str">&#x27;Iowa&#x27;</span><span class="op">:</span> <span class="num">8</span><span class="op">,</span> <span class="str">&#x27;Minnesota&#x27;</span><span class="op">:</span> <span class="num">8</span><span class="op">,</span> <span class="str">&#x27;Missouri&#x27;</span><span class="op">:</span> <span class="num">8</span><span class="op">,</span> <span class="str">&#x27;Nebraska&#x27;</span><span class="op">:</span> <span class="num">8</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t78" href="#t78">78</a></span><span class="t">    <span class="str">&#x27;North Dakota&#x27;</span><span class="op">:</span> <span class="num">8</span><span class="op">,</span> <span class="str">&#x27;South Dakota&#x27;</span><span class="op">:</span> <span class="num">8</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t79" href="#t79">79</a></span><span class="t">    <span class="str">&#x27;Alaska&#x27;</span><span class="op">:</span> <span class="num">9</span><span class="op">,</span> <span class="str">&#x27;Arizona&#x27;</span><span class="op">:</span> <span class="num">9</span><span class="op">,</span> <span class="str">&#x27;California&#x27;</span><span class="op">:</span> <span class="num">9</span><span class="op">,</span> <span class="str">&#x27;Guam&#x27;</span><span class="op">:</span> <span class="num">9</span><span class="op">,</span> <span class="str">&#x27;Hawaii&#x27;</span><span class="op">:</span> <span class="num">9</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t80" href="#t80">80</a></span><span class="t">    <span class="str">&#x27;Idaho&#x27;</span><span class="op">:</span> <span class="num">9</span><span class="op">,</span> <span class="str">&#x27;Montana&#x27;</span><span class="op">:</span> <span class="num">9</span><span class="op">,</span> <span class="str">&#x27;Nevada&#x27;</span><span class="op">:</span> <span class="num">9</span><span class="op">,</span> <span class="str">&#x27;Northern Mariana Islands&#x27;</span><span class="op">:</span> <span class="num">9</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t81" href="#t81">81</a></span><span class="t">    <span class="str">&#x27;Oregon&#x27;</span><span class="op">:</span> <span class="num">9</span><span class="op">,</span> <span class="str">&#x27;Washington&#x27;</span><span class="op">:</span> <span class="num">9</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t82" href="#t82">82</a></span><span class="t">    <span class="str">&#x27;Colorado&#x27;</span><span class="op">:</span> <span class="num">10</span><span class="op">,</span> <span class="str">&#x27;Kansas&#x27;</span><span class="op">:</span> <span class="num">10</span><span class="op">,</span> <span class="str">&#x27;New Mexico&#x27;</span><span class="op">:</span> <span class="num">10</span><span class="op">,</span> <span class="str">&#x27;Oklahoma&#x27;</span><span class="op">:</span> <span class="num">10</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t83" href="#t83">83</a></span><span class="t">    <span class="str">&#x27;Utah&#x27;</span><span class="op">:</span> <span class="num">10</span><span class="op">,</span> <span class="str">&#x27;Wyoming&#x27;</span><span class="op">:</span> <span class="num">10</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t84" href="#t84">84</a></span><span class="t">    <span class="str">&#x27;Alabama&#x27;</span><span class="op">:</span> <span class="num">11</span><span class="op">,</span> <span class="str">&#x27;Florida&#x27;</span><span class="op">:</span> <span class="num">11</span><span class="op">,</span> <span class="str">&#x27;Georgia&#x27;</span><span class="op">:</span> <span class="num">11</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t85" href="#t85">85</a></span><span class="t">    <span class="str">&#x27;Columbia&#x27;</span><span class="op">:</span> <span class="num">12</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t86" href="#t86">86</a></span><span class="t"><span class="nam">_ENV_DATA</span><span class="op">:</span> <span class="nam">str</span> <span class="op">=</span> <span class="str">&#x27;FJC_BIOGRAPHIES_DATA_DIR&#x27;</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t87" href="#t87">87</a></span><span class="t"><span class="nam">_EXPORT_URL</span><span class="op">:</span> <span class="nam">str</span> <span class="op">=</span> <span class="op">(</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t88" href="#t88">88</a></span><span class="t">    <span class="str">&#x27;https://www.fjc.gov/history/judges/&#x27;</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t89" href="#t89">89</a></span><span class="t">    <span class="str">&#x27;biographical-directory-article-iii-federal-judges-export&#x27;</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t90" href="#t90">90</a></span><span class="t"><span class="nam">_FJC_URL</span><span class="op">:</span> <span class="nam">str</span> <span class="op">=</span> <span class="str">&#x27;https://www.fjc.gov/sites/default/files/history/&#x27;</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t91" href="#t91">91</a></span><span class="t"><span class="nam">_PARTIES</span><span class="op">:</span> <span class="nam">dict</span><span class="op">[</span><span class="nam">str</span><span class="op">,</span> <span class="nam">int</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span><span class="str">&#x27;Democratic&#x27;</span><span class="op">:</span> <span class="op">-</span><span class="num">1</span><span class="op">,</span> <span class="str">&#x27;Republican&#x27;</span><span class="op">:</span> <span class="num">1</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t92" href="#t92">92</a></span><span class="t"><span class="nam">_TIMEOUT</span><span class="op">:</span> <span class="nam">int</span> <span class="op">=</span> <span class="num">300</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t93" href="#t93">93</a></span><span class="t"><span class="nam">_USER_AGENT</span><span class="op">:</span> <span class="nam">str</span> <span class="op">=</span> <span class="op">(</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t94" href="#t94">94</a></span><span class="t">    <span class="str">&#x27;fjc_biographies (+https://github.com/WithPrecedent/fjc_biographies)&#x27;</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+</main>
+<footer>
+    <div class="content">
+        <p>
+            <a class="nav" href="z_e714c804d4e2a9d8_names_py.html">&#xab; prev</a> &nbsp; &nbsp;
+            <a class="nav" href="covindex.html">&Hat; index</a> &nbsp; &nbsp;
+            <a class="nav" href="z_e714c804d4e2a9d8_parser_py.html">&#xbb; next</a>
+            &nbsp; &nbsp; &nbsp;
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.17.0">coverage.py v7.17.0</a>,
+            created at 2026-10-22 22:47 +0000
+        </p>
+    </div>
+</footer>
+</body>
+</html>
