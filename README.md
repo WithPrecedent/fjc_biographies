@@ -33,7 +33,7 @@ judge (a row for each judge).
   judge's gender and race, etc.
 - **Fields from careers, written in a spreadsheet.** A rulebook (a CSV file
   of regular expressions) makes new fields from each judge's
-  employment history. The built-in "judges" rulebook flags whether the judge
+  employment history. The built-in "employment" rulebook flags whether the judge
   was a prosecutor, public defender, law clerk, Supreme Court clerk,
   solicitor general, or law professor, and your own rulebook can add flags,
   counts, labels, or lists of matches without changing any code.
@@ -118,7 +118,7 @@ by_judge = fjc_biographies.roster_by_judge(roster)
 ```
 
 To make other fields from judges' careers, copy the built-in rulebook
-([`judges.csv`](src/fjc_biographies/instructions/judges.csv)), change or add
+([`employment.csv`](src/fjc_biographies/instructions/employment.csv)), change or add
 rules, and name it:
 
 ```python

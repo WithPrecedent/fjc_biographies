@@ -263,7 +263,7 @@ def test_code_careers_with_own_rulebook(tmp_path: pathlib.Path) -> None:
 
 def test_code_careers_sorts_positions() -> None:
     career = tables()['career'].iloc[::-1]
-    book = fjc_biographies.Rulebook.create('judges')
+    book = fjc_biographies.Rulebook.create('employment')
     coded = fjc_biographies.code_careers(career, rulebook = book)
     assert list(coded.index) == [101, 102, 103, 104, 105, 113]
 

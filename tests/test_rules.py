@@ -154,9 +154,9 @@ def test_load_reports_file_and_row(tmp_path: pathlib.Path) -> None:
 
 
 def test_find_instructions() -> None:
-    assert [p.name for p in rules.find_instructions('judges')] == ['judges.csv']
-    assert rules.find_instructions('judges.csv')[0].parent.name == 'instructions'
-    with pytest.raises(FileNotFoundError, match = r"built-in rulebook \(\['judges'\]\)"):
+    assert [p.name for p in rules.find_instructions('employment')] == ['employment.csv']
+    assert rules.find_instructions('employment.csv')[0].parent.name == 'instructions'
+    with pytest.raises(FileNotFoundError, match = r"built-in rulebook \(\['employment'\]\)"):
         rules.find_instructions('no_such_rules')
 
 
@@ -173,20 +173,20 @@ def test_folder_of_rules(tmp_path: pathlib.Path) -> None:
 
 
 def test_files_named_twice_are_read_once(tmp_path: pathlib.Path) -> None:
-    built_in = rules.find_instructions('judges')[0]
-    both = rules.Rulebook.load('judges', built_in)
-    assert len(both) == len(rules.Rulebook.load('judges'))
-    assert both.name == 'judges'
+    built_in = rules.find_instructions('employment')[0]
+    both = rules.Rulebook.load('employment', built_in)
+    assert len(both) == len(rules.Rulebook.load('employment'))
+    assert both.name == 'employment'
 
 
 def test_create() -> None:
-    book = rules.Rulebook.load('judges')
+    book = rules.Rulebook.load('employment')
     assert rules.Rulebook.create(book) is book
-    assert len(rules.Rulebook.create('judges')) == len(book)
+    assert len(rules.Rulebook.create('employment')) == len(book)
 
 
-def test_judges_rulebook() -> None:
-    book = rules.Rulebook.load('judges')
+def test_employment_rulebook() -> None:
+    book = rules.Rulebook.load('employment')
     assert book.targets == ['career']
     assert book.variables == [
         'prosecutor', 'public_defender', 'law_clerk', 'supreme_court_clerk',

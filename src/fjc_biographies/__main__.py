@@ -76,7 +76,7 @@ def _get_parser() -> argparse.ArgumentParser:
             'to get the judges and corrections the FJC has added since'))
     parser.add_argument(
         '--rulebook',
-        default = 'judges',
+        default = 'employment',
         help = (
             "a CSV file of rules that make the roster's fields from judges' "
             'careers, or the name of a built-in rulebook (default: '

@@ -24,7 +24,7 @@ by_judge = fjc_biographies.roster_by_judge(roster)
 `roster_by_judge` organizes the same roster with a row for each judge.
 
 The fields that a roster has about judges' careers are made by a rulebook
-(see `rules`): the "judges" rulebook in fjc_biographies' "instructions"
+(see `rules`): the "employment" rulebook in fjc_biographies' "instructions"
 folder, unless another is named. It is a CSV file, so fields can be added or
 changed in a spreadsheet, without changing fjc_biographies.
 
@@ -94,7 +94,7 @@ def build_roster(
     demographics: pd.DataFrame | pathlib.Path | str,
     career: pd.DataFrame | pathlib.Path | str | None = None,
     *,
-    rulebook: rules.Rulebook | pathlib.Path | str = 'judges') -> pd.DataFrame:
+    rulebook: rules.Rulebook | pathlib.Path | str = 'employment') -> pd.DataFrame:
     """Makes a table with a row for each court that each judge has served on.
 
     The table has these columns:
@@ -127,7 +127,7 @@ def build_roster(
     "career", with each position on its own line, in order. It is the text
     that the rules search, so the fields made from it can be checked
     against it. Each variable that `rulebook` makes from the career (see
-    `code_careers`) is a column after it. The "judges" rulebook makes
+    `code_careers`) is a column after it. The "employment" rulebook makes
     "prosecutor", "public_defender", "law_clerk", "supreme_court_clerk",
     "solicitor_general", and "law_professor". "career" is missing for a
     judge with no career in the file.
@@ -140,7 +140,7 @@ def build_roster(
             Defaults to None, in which case no careers are coded.
         rulebook: the rules that code the careers: a rulebook, or the name of
             a built-in rulebook or the path of a CSV file. Defaults to
-            "judges".
+            "employment".
 
     Returns:
         The table, sorted by judge and then by the order of the judge's
@@ -241,12 +241,12 @@ def code_careers(
     career: pd.DataFrame | pathlib.Path | str,
     nids: Iterable[int] | None = None,
     *,
-    rulebook: rules.Rulebook | pathlib.Path | str = 'judges') -> pd.DataFrame:
+    rulebook: rules.Rulebook | pathlib.Path | str = 'employment') -> pd.DataFrame:
     """Makes fields from judges' professional careers with a rulebook.
 
     Each judge's positions are put in order, one on each line, as the section
     of text "career", which the rules of `rulebook` search (see `rules`).
-    Each variable that the rules make is a field. The "judges" rulebook (in
+    Each variable that the rules make is a field. The "employment" rulebook (in
     fjc_biographies' "instructions" folder) makes a flag for each of six
     kinds of positions: "prosecutor", "public_defender", "law_clerk",
     "supreme_court_clerk", "solicitor_general", and "law_professor".
@@ -260,7 +260,7 @@ def code_careers(
             case the judges in `career` are coded.
         rulebook: the rules: a rulebook, or the name of a built-in rulebook
             or the path of a CSV file or a folder of them. Defaults to
-            "judges".
+            "employment".
 
     Returns:
         A table with a column for each variable of the rulebook, in order,

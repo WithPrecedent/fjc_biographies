@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 <!-- insertion marker -->
 
+## Unreleased
+
+* Renames the built-in rulebook from "judges" (`instructions/judges.csv`) to
+  "employment" (`instructions/employment.csv`), which is now the default
+  `rulebook` and `--rulebook`.
+
 ## 0.1.0
 
 * Exports the roster in two formats: by appointment

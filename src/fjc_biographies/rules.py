@@ -1,7 +1,7 @@
 """Rules that make new fields from the text of judges' biographies.
 
 The rules are written in CSV files (spreadsheets), so they can be read and
-changed without knowing Python. They are the rules of courtpy, whose "judges"
+changed without knowing Python. They are the rules of courtpy. The "employment"
 rulebook (in fjc_biographies' "instructions" folder) codes each judge's
 professional career. Each row is one rule. The columns are:
 
@@ -296,7 +296,7 @@ class Rulebook:
         """Loads rules from CSV files.
 
         Args:
-            *sources: names of built-in rulebooks (such as "judges"), or paths
+            *sources: names of built-in rulebooks (such as "employment"), or paths
                 to CSV files or to folders of them. The rules are applied in
                 the order they are given (and, in a folder, in the
                 alphabetical order of the files). A file that two sources
@@ -421,7 +421,7 @@ def find_instructions(source: str | pathlib.Path) -> list[pathlib.Path]:
 
     Args:
         source: the name of a built-in rulebook (a file in fjc_biographies'
-            "instructions" folder, such as "judges"), or the path to a CSV
+            "instructions" folder, such as "employment"), or the path to a CSV
             file or a folder of them.
 
     Returns:

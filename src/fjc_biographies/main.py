@@ -42,7 +42,7 @@ def run(
     folder: pathlib.Path | str | None = None,
     *,
     update: bool = False,
-    rulebook: rules.Rulebook | pathlib.Path | str = 'judges',
+    rulebook: rules.Rulebook | pathlib.Path | str = 'employment',
     jcs: bool = False,
     martin_quinn: bool | pathlib.Path | str = False,
     scores_folder: pathlib.Path | str | None = None) -> dict[
@@ -56,7 +56,7 @@ def run(
             to get the judges and corrections since they were downloaded.
             Defaults to False.
         rulebook: the rules that make the roster's fields about judges'
-            careers (see `parser.code_careers`). Defaults to "judges".
+            careers (see `parser.code_careers`). Defaults to "employment".
         jcs: whether to add each appointment's Judicial Common Space score
             (see `scores.add_jcs`). Defaults to False.
         martin_quinn: whether to add the justices' Martin-Quinn scores (see
